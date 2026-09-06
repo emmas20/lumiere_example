@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --color-ivory: #faf6ef;
+  --color-cream: #f1e9da;
+  --color-panel: #ffffff;
+  --color-line: #e6ddc9;
+  --color-ink: #2b2822;
+  --color-ink-dim: #7a7364;
+  --color-emerald: #2f4d3d;
+  --color-emerald-bright: #3f6650;
+  --color-gold: #b6893f;
+  --color-gold-bright: #cf9f52;
+  --color-blush: #c98f83;
+  --color-rose: #b25a52;
+}
+
+@theme inline {
+  --color-ivory: var(--color-ivory);
+  --color-cream: var(--color-cream);
+  --color-panel: var(--color-panel);
+  --color-line: var(--color-line);
+  --color-ink: var(--color-ink);
+  --color-ink-dim: var(--color-ink-dim);
+  --color-emerald: var(--color-emerald);
+  --color-emerald-bright: var(--color-emerald-bright);
+  --color-gold: var(--color-gold);
+  --color-gold-bright: var(--color-gold-bright);
+  --color-blush: var(--color-blush);
+  --color-rose: var(--color-rose);
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ivory);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.arch-top {
+  border-radius: 999px 999px 8px 8px;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.55s ease-out both;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-gold-bright) 50%, var(--color-gold) 100%);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+.pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
