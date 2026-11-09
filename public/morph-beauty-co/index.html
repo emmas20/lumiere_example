@@ -88,7 +88,7 @@ section{padding-block:96px}
 .owner h3{font-size:clamp(40px,4.6vw,56px);line-height:1}
 .owner .biz{font-size:15px;color:var(--muted);margin:8px 0 22px}
 .owner p{font-size:17px;max-width:44ch;margin-bottom:14px}
-.owner .meta{display:inline-block;font-size:14px;color:var(--muted);margin:18px 0 28px}
+.owner .meta{font-size:14.5px;color:var(--muted);margin:20px 0 28px}
 @media (max-width:900px){.owner{grid-template-columns:1fr}.owner>.label{display:none}.owner .photo{max-width:440px}}
 .team{display:grid;grid-template-columns:200px 1fr;gap:32px;padding-top:48px}
 .member{display:grid;grid-template-columns:120px 1fr auto;gap:28px;align-items:center;padding-block:24px;border-bottom:1px solid var(--line)}
@@ -96,7 +96,9 @@ section{padding-block:96px}
 .member .photo{aspect-ratio:1}
 .member h3{font-size:32px;line-height:1.05}
 .member p{color:var(--muted);margin-top:6px}
-.member .meta{display:inline-block;font-size:13.5px;color:var(--muted);margin-top:8px}
+.member .meta{font-size:13.5px;color:var(--muted);margin-top:10px}
+.meta .off{font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-right:6px}
+.meta .ed{display:inline-block}
 @media (max-width:900px){.team{grid-template-columns:1fr}}
 @media (max-width:560px){.member{grid-template-columns:88px 1fr}.member .btn{grid-column:1/-1;justify-self:start}}
 
@@ -242,7 +244,7 @@ footer .logo{font-size:30px;color:var(--ink);margin:0}
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#top">morph<small>BEAUTY CO.</small></a>
-    <nav aria-label="Main"><a href="#studio">Studio</a><a href="#artists">Artists</a><a href="#services">Services</a><a href="#academy">Academy</a><a href="#shop">Shop</a><a href="#visit">Visit</a></nav>
+    <nav aria-label="Main"><a href="#studio">Studio</a><a href="#artists">Artists</a><a href="#academy">Academy</a><a href="#shop">Shop</a><a href="#visit">Visit</a></nav>
     <a class="bag" href="#shop" id="bag" hidden>Bag (<span id="bag-n">0</span>)</a>
     <a class="btn" href="#artists">Book</a>
   </div>
@@ -296,8 +298,8 @@ footer .logo{font-size:30px;color:var(--ink);margin:0}
           <div class="biz">Chelsea Rae Styles · Owner of Morph Beauty Co. and founder of Morph Beauty Academy</div>
           <p>Chelsea started Morph Beauty Co. so talented artists could grow their own businesses under one roof. In her chair, she's known for soft, natural lash sets and an appointment that feels easy. <span class="tag">Sample bio</span></p>
           <p>When she's not with clients, she's teaching. Chelsea is the lead educator at Morph Beauty Academy.</p>
-          <div><span class="meta ed" data-chip="Edit services">Lash extensions · Lash lifts · Spray tans · Training</span></div>
-          <button class="btn" data-artist="0">Book with Chelsea</button>
+          <div class="meta"><span class="off">Offers</span> <span class="ed" data-chip="Edit what you offer">Lash extensions · Lash lifts · Spray tans</span></div>
+          <button class="btn" data-artist="0">Book now</button>
         </div>
       </div>
       <div class="team">
@@ -305,30 +307,14 @@ footer .logo{font-size:30px;color:var(--ink);margin:0}
         <div>
           <div class="member">
             <div class="photo warm" data-chip="Replace photo"><span>Paige</span></div>
-            <div><h3>Paige Tiegs</h3><p>Volume One Beauty · Full, fluffy volume sets that last. <span class="tag">Sample</span></p><span class="meta ed" data-chip="Edit services">Volume lashes · Hybrid sets · Fills</span></div>
-            <button class="btn ghost" data-artist="1">Book with Paige</button>
+            <div><h3>Paige Tiegs</h3><p>Volume One Beauty · Full, fluffy volume sets that last. <span class="tag">Sample</span></p><div class="meta"><span class="off">Offers</span> <span class="ed" data-chip="Edit what she offers">Volume lashes · Hybrid sets · Fills</span></div></div>
+            <button class="btn" data-artist="1">Book now</button>
           </div>
           <div class="member">
             <div class="photo" data-chip="Replace photo"><span>Karlee</span></div>
-            <div><h3>Karlee Sage</h3><p>Karlee Sage Beauty Bar · Brows that suit your face, and easy lash lifts. <span class="tag">Sample</span></p><span class="meta ed" data-chip="Edit services">Brow lamination · Tint &amp; shape · Lash lifts</span></div>
-            <button class="btn ghost" data-artist="2">Book with Karlee</button>
+            <div><h3>Karlee Sage</h3><p>Karlee Sage Beauty Bar · Brows that suit your face, and easy lash lifts. <span class="tag">Sample</span></p><div class="meta"><span class="off">Offers</span> <span class="ed" data-chip="Edit what she offers">Brow lamination · Tint &amp; shape · Lash lifts</span></div></div>
+            <button class="btn" data-artist="2">Book now</button>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="services" id="services">
-    <div class="wrap">
-      <div class="sec-head"><div class="label">Services</div><h2>Services and prices, by artist.</h2></div>
-      <div class="svc-wrap">
-        <div></div>
-        <div class="svc-main">
-          <div class="tabs" role="tablist" id="tabs"></div>
-          <div id="menu" data-chip="Edit services and prices"></div>
-          <button class="btn ghost add-svc" id="add-svc" type="button">Add a service</button>
-          <p class="edit-hint">Click any service name, length or price to change it. Your booking page updates right away.</p>
-          <div class="svc-note"><span>A $25 deposit holds your spot and comes off your total.</span><span class="tag">Sample prices</span></div>
         </div>
       </div>
     </div>
@@ -349,7 +335,7 @@ footer .logo{font-size:30px;color:var(--ink);margin:0}
           <div><h4>Classic lash certification</h4><p>Two days. Theory, kit, and live model practice.</p></div>
           <div><h4>Volume lash course</h4><p>Fan making, mapping and retention.</p></div>
           <div><h4>Spray tan training</h4><p>One day. Prep, application and aftercare.</p></div>
-          <p style="margin-top:18px;font-size:14px;color:var(--on-night-muted)">Course pages and online enrollment coming soon. <span class="tag">Sample courses</span></p>
+          <p style="margin-top:18px;font-size:14px;color:var(--on-night-muted)">Online courses and certification coming soon. <span class="tag">Sample courses</span></p>
           <a class="btn" href="#visit">Ask about upcoming dates</a>
         </div>
         <div class="photo" data-chip="Replace photo"><span>Photo · a class in progress</span></div>
@@ -398,8 +384,8 @@ footer .logo{font-size:30px;color:var(--ink);margin:0}
 <div class="edit-bar" id="edit-bar" hidden>
   <div class="in">
     <b>Editing mode</b>
-    <div class="what"><span>Services</span><span>Prices</span><span>Photos</span><span>Hours</span></div>
-    <p class="note">Click anything with a dashed outline to change it. For anything else, just text Emma. This demo resets when you reload.</p>
+    <div class="what"><span>What each artist offers</span><span>Photos</span><span>Hours</span></div>
+    <p class="note">Click anything with a dashed outline to change it. Services and prices are updated in your booking system. For anything else, just text Emma. This demo resets when you reload.</p>
     <button class="btn" id="edit-off" type="button">Done</button>
   </div>
 </div>
@@ -437,22 +423,6 @@ function applyEditable(){
     if(editing){el.setAttribute("contenteditable","true");el.setAttribute("spellcheck","false")}else el.removeAttribute("contenteditable")});
 }
 
-/* services menu */
-const tabs=$("tabs"),menu=$("menu");
-tabs.innerHTML=artists.map((a,i)=>`<button role="tab" aria-selected="${i===0}" data-i="${i}">${esc(a.name)}</button>`).join("");
-function showMenu(i){
-  cur=i;tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-selected",b.dataset.i==i));
-  menu.innerHTML=artists[i].menu.map((m,k)=>`<div class="price-row" data-k="${k}"><div><h4 data-f="0">${esc(m[0])}</h4><p data-f="3">${esc(m[3])}</p></div><span class="time" data-f="1">${esc(m[1])}</span><span class="amt" data-f="2">${money(m[2])}</span><button class="rm" type="button">Remove</button></div>`).join("");
-  applyEditable();
-}
-tabs.addEventListener("click",e=>{const b=e.target.closest("button");if(b)showMenu(+b.dataset.i)});
-menu.addEventListener("input",e=>{const el=e.target.closest("[data-f]");if(!el)return;const k=+el.closest(".price-row").dataset.k,f=+el.dataset.f;
-  artists[cur].menu[k][f]=f===2?num(el.textContent):el.textContent.trim()});
-menu.addEventListener("focusout",e=>{const el=e.target.closest('[data-f="2"]');if(el)el.textContent=money(artists[cur].menu[+el.closest(".price-row").dataset.k][2])});
-menu.addEventListener("click",e=>{const b=e.target.closest(".rm");if(!b)return;artists[cur].menu.splice(+b.closest(".price-row").dataset.k,1);showMenu(cur);toast("Service removed")});
-$("add-svc").onclick=()=>{artists[cur].menu.push(["New service","1 hr",50,"Describe the service here."]);showMenu(cur);
-  const h=menu.querySelector(".price-row:last-child h4");h.focus();document.getSelection().selectAllChildren(h)};
-showMenu(0);
 
 /* shop */
 const bag={n:0};
@@ -466,7 +436,7 @@ $("products").addEventListener("click",e=>{const b=e.target.closest(".add");if(!
 
 /* edit mode */
 function setEdit(on){editing=on;document.body.classList.toggle("editing",on);$("edit-bar").hidden=!on;$("edit-on").hidden=on;applyEditable();
-  if(on)toast("You're in editing mode. Try changing a price or a photo.")}
+  if(on)toast("You're in editing mode. Try changing what an artist offers, or a photo.")}
 $("edit-on").onclick=()=>setEdit(true);$("edit-off").onclick=()=>{setEdit(false);toast("Changes saved")};
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.isContentEditable){e.preventDefault();e.target.blur()}});
 
