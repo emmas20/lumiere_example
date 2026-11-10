@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zoroliq Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@500;600&family=Gilda+Display&family=Jost:wght@300;400;500&display=swap">
+<style>
+body{margin:0}img{max-width:100%}
+/* Layout: two linked views. Owner view copies the Zoroliq dashboard (lavender sidebar, white cards, blue-violet gradient).
+   Student view is Morph's branded Zoroliq page (Blush preset: Gilda Display + Jost, rose clay). Single committed light look. */
+:root{
+  --zq-bg:#f6f7fc; --zq-card:#ffffff; --zq-ink:#141b2e; --zq-muted:#66708a; --zq-line:#e2e6f3; --zq-soft:#eef0ff; --zq-blue:#4f5ff0;
+  --zq-grad:linear-gradient(135deg,#5b82ff,#6b6cff 55%,#8b6cff);
+  --ok:#0e8a60; --ok-bg:#e6f6ee; --warn:#a66a10; --warn-bg:#fdf2de; --bad:#c2410c; --bad-bg:#fdece4;
+  --m-paper:#f7f2ef; --m-card:#fffdfc; --m-ink:#2a1f1c; --m-muted:#7a6a64; --m-line:#e8dcd6; --m-brand:#a6665c; --m-brand-ink:#ffffff; --m-soft:#f2e3de;
+  --heading:"Manrope",system-ui,sans-serif; --body:"DM Sans",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  --m-serif:"Gilda Display",Georgia,serif; --m-sans:"Jost","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--zq-bg);color:var(--zq-ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:#0f1530}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--zq-blue);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+
+/* demo bar */
+.demo-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:#0f1530;color:#e8ecff}
+.demo-bar .in{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.demo-bar .t{font-family:var(--heading);font-weight:700;font-size:14px;margin-right:auto;display:flex;align-items:center;gap:10px}
+.demo-bar .t small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:#9aa6d8;font-weight:500}
+.seg{display:flex;background:rgba(255,255,255,.08);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;color:#c7cff2;padding:7px 14px;border-radius:999px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:#fff;color:#141b2e}
+.seg .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#ff8a65;margin-left:6px;vertical-align:1px}
+.guide{background:#eef0ff;border-bottom:1px solid var(--zq-line);font-size:13.5px;color:#3d4669}
+.guide .in{display:flex;gap:8px 20px;flex-wrap:wrap;align-items:center;padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.guide b{font-weight:600;color:var(--zq-ink)}
+.guide ol{display:flex;gap:6px 18px;flex-wrap:wrap;margin:0;padding:0;list-style:none;counter-reset:g}
+.guide li{counter-increment:g}
+.guide li::before{content:counter(g);display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--zq-blue);color:#fff;font-size:11px;font-weight:600;margin-right:6px}
+.guide li.done::before{content:"✓";background:var(--ok)}
+
+/* ---------- OWNER (Zoroliq dashboard) ---------- */
+.app{display:grid;grid-template-columns:252px 1fr;min-height:calc(100vh - 92px)}
+.side{background:radial-gradient(120% 60% at 0% 0%,rgba(130,229,255,.18),transparent 60%),radial-gradient(120% 60% at 100% 100%,rgba(155,124,255,.14),transparent 60%),#f3f2fe;border-right:1px solid var(--zq-line);padding:20px 14px;display:flex;flex-direction:column;gap:14px;padding-left:max(14px,env(safe-area-inset-left,0px))}
+.logo{display:flex;align-items:center;gap:10px;padding:2px 6px}
+.logo .z{width:32px;height:32px;border-radius:50%;background:var(--zq-grad);color:#fff;display:grid;place-items:center;font-family:var(--heading);font-weight:800;font-size:14px}
+.logo span{font-family:var(--heading);font-weight:700;letter-spacing:.28em;font-size:14px}
+.biz{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--zq-line);border-radius:14px;padding:10px}
+.biz .ini{width:40px;height:40px;border-radius:12px;background:#eef0ff;color:var(--zq-blue);display:grid;place-items:center;font-size:12px;font-weight:700}
+.biz b{display:block;font-weight:600;font-size:14px;line-height:1.2}
+.biz small{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:#8a93a6}
+.nav{display:grid;gap:2px}
+.nav .grp{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:#8a93a6;padding:12px 12px 4px}
+.nav button{display:flex;align-items:center;gap:11px;border:1px solid transparent;background:none;border-radius:12px;padding:8px 12px;font-size:14px;font-weight:500;color:#4b5568;cursor:pointer;text-align:left;width:100%}
+.nav button:hover{background:rgba(255,255,255,.6);color:#1f2937}
+.nav button[aria-current="page"]{border-color:#c9d2ff;background:rgba(255,255,255,.85);color:#3d4fd6;box-shadow:0 1px 2px rgba(60,70,180,.08)}
+.nav svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;color:#6b7487}
+.nav button[aria-current="page"] svg{color:var(--zq-blue)}
+.new{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.12em;background:rgba(79,95,240,.1);color:var(--zq-blue);border-radius:999px;padding:2px 7px}
+.main{min-width:0;background:radial-gradient(900px 400px at 85% -120px,rgba(107,146,255,.10),transparent 70%),radial-gradient(700px 360px at 10% -160px,rgba(155,124,255,.08),transparent 70%),var(--zq-bg)}
+.topbar{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:14px 28px;border-bottom:1px solid var(--zq-line);background:rgba(255,255,255,.55)}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--zq-line);background:#fff;border-radius:12px;padding:8px 12px;color:#8a93a6;font-size:14px;min-width:220px}
+.av{width:36px;height:36px;border-radius:50%;background:var(--zq-grad);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.page{padding:28px;padding-right:max(28px,env(safe-area-inset-right,0px));max-width:1180px}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.ph h1{font-family:var(--heading);font-weight:700;letter-spacing:-.03em;font-size:30px}
+.ph p{color:var(--zq-muted);margin-top:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:10px 16px;font-weight:600;font-size:14px;cursor:pointer;background:var(--zq-grad);color:#fff;box-shadow:0 6px 18px -6px rgba(91,108,255,.55);text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.06)}
+.btn.sec{background:#fff;color:var(--zq-ink);border:1px solid var(--zq-line);box-shadow:none}
+.btn.sec:hover{background:#f8f9ff;filter:none}
+.btn.ok{background:var(--ok);box-shadow:none}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}
+.card{background:var(--zq-card);border:1px solid var(--zq-line);border-radius:16px;box-shadow:0 1px 2px rgba(16,24,64,.04),0 8px 24px -12px rgba(16,24,64,.10)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat{padding:16px 18px}
+.stat small{color:var(--zq-muted);font-size:13px}
+.stat b{display:block;font-family:var(--heading);font-weight:700;font-size:26px;letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat.hl{border-color:#c9d2ff;background:linear-gradient(135deg,rgba(91,130,255,.08),#fff 60%)}
+@media (max-width:1100px){.stats{grid-template-columns:1fr 1fr}}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--zq-line);margin-bottom:20px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;font-weight:600;font-size:14px;color:var(--zq-muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tabs button[aria-selected="true"]{color:var(--zq-blue);border-bottom-color:var(--zq-blue)}
+.count{background:var(--zq-blue);color:#fff;border-radius:999px;font-size:11px;padding:0 7px;line-height:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.course{overflow:hidden;display:flex;flex-direction:column}
+.course .cover{height:120px;background:linear-gradient(135deg,#e9cfc8,#a6665c 70%,#5b332c);position:relative}
+.course .cover.b{background:linear-gradient(135deg,#ecd9c2,#b08a62 70%,#5e4330)}
+.course .cover.c{background:linear-gradient(135deg,#dfe3ff,#8b96d9 70%,#3d4583)}
+.course .cover span{position:absolute;left:14px;bottom:12px}
+.course .body{padding:16px 18px;display:grid;gap:10px;flex:1}
+.course h3{font-family:var(--heading);font-size:18px;letter-spacing:-.01em}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--zq-muted);font-size:13px}
+.course .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;border-top:1px solid var(--zq-line)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.mut{background:#eef0f6;color:#5b6479}.pill.blue{background:var(--zq-soft);color:var(--zq-blue)}.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.on-cover{background:rgba(255,255,255,.9);color:var(--zq-ink)}
+.tablewrap{overflow-x:auto}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:640px}
+.t th{text-align:left;font-weight:600;color:var(--zq-muted);font-size:12.5px;padding:12px 16px;border-bottom:1px solid var(--zq-line);background:#fafbff}
+.t td{padding:13px 16px;border-bottom:1px solid var(--zq-line);vertical-align:middle}
+.t tr:last-child td{border-bottom:0}
+.t .num{font-variant-numeric:tabular-nums}
+.who{display:flex;align-items:center;gap:10px}
+.who .i{width:32px;height:32px;border-radius:50%;background:#eef0ff;color:var(--zq-blue);display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.who.me .i{background:var(--zq-grad);color:#fff}
+.bar{height:6px;border-radius:99px;background:#eceff8;overflow:hidden;width:120px}
+.bar i{display:block;height:100%;background:var(--zq-grad);border-radius:99px}
+.sub{padding:18px;display:grid;gap:14px}
+.sub-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.thumbs{display:flex;gap:10px;flex-wrap:wrap}
+.thumb{width:110px;height:110px;border-radius:12px;background-size:cover;background-position:center;position:relative;overflow:hidden;flex:none}
+.thumb span{position:absolute;left:6px;bottom:6px;font-size:10.5px;background:rgba(255,255,255,.9);border-radius:6px;padding:1px 6px;color:var(--zq-ink)}
+.ph1{background:linear-gradient(135deg,#e7c9c3,#a2675e 70%,#5b332c)}.ph2{background:linear-gradient(135deg,#ecd9c2,#b08a62 70%,#5e4330)}.ph3{background:linear-gradient(135deg,#e2d0d6,#97707e 70%,#4c3240)}
+.sub .note{background:#fafbff;border:1px solid var(--zq-line);border-radius:12px;padding:10px 12px;font-size:14px;color:#3d4669}
+.sub .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sub textarea,.field input,.field textarea,.field select{width:100%;border:1px solid var(--zq-line);border-radius:10px;padding:9px 11px;font:inherit;font-size:14px;background:#fff;color:var(--zq-ink)}
+.empty{padding:40px 20px;text-align:center;color:var(--zq-muted)}
+.empty b{display:block;color:var(--zq-ink);font-family:var(--heading);font-size:17px;margin-bottom:4px}
+/* course editor */
+.ed{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:start}
+@media (max-width:1000px){.ed{grid-template-columns:1fr}}
+.ed .card{padding:18px}
+.ed h3{font-family:var(--heading);font-size:16px;margin-bottom:12px}
+.lrow{display:grid;grid-template-columns:20px 28px 1fr auto;gap:10px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--zq-line);font-size:14px}
+.lrow:last-of-type{border-bottom:0}
+.lrow .h{color:#b3b9cc;cursor:grab;letter-spacing:-2px}
+.lrow .ic{width:28px;height:28px;border-radius:8px;background:var(--zq-soft);color:var(--zq-blue);display:grid;place-items:center;font-size:12px}
+.lrow small{color:var(--zq-muted)}
+.field{display:grid;gap:6px;margin-bottom:12px}
+.field label{font-size:13px;font-weight:600}
+.field .hint{font-size:12.5px;color:var(--zq-muted)}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:14px}
+.check input{margin-top:3px;accent-color:var(--zq-blue)}
+.check small{display:block;color:var(--zq-muted);font-size:12.5px}
+.back{border:0;background:none;color:var(--zq-blue);font-weight:600;cursor:pointer;padding:0;margin-bottom:10px}
+@media (max-width:900px){.app{grid-template-columns:1fr}.side{display:none}.topbar{justify-content:space-between}.topbar .mlogo{display:flex}.page{padding:20px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px))}.search{display:none}}
+.mlogo{display:none}
+
+/* ---------- STUDENT (Morph branded page, Blush preset) ---------- */
+.stu{background:var(--m-paper);color:var(--m-ink);font-family:var(--m-sans);font-weight:400;min-height:calc(100vh - 92px)}
+.stu .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stu h1,.stu h2,.stu h3{font-family:var(--m-serif);font-weight:400}
+.mhead{border-bottom:1px solid var(--m-line);background:var(--m-card)}
+.mhead .wrap{display:flex;align-items:center;gap:16px;padding-block:14px;flex-wrap:wrap}
+.mhead .brand{font-family:var(--m-serif);font-size:22px;margin-right:auto}
+.mhead .brand small{font-family:var(--m-sans);font-size:11px;letter-spacing:.18em;color:var(--m-muted);margin-left:6px}
+.mtabs{display:flex;gap:4px}
+.mtabs span{font-size:14px;padding:7px 14px;border-radius:999px;color:var(--m-muted)}
+.mtabs span.on{background:var(--m-soft);color:var(--m-ink)}
+.mbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--m-brand);background:var(--m-brand);color:var(--m-brand-ink);border-radius:999px;padding:12px 24px;font:500 14px var(--m-sans);letter-spacing:.03em;cursor:pointer;text-decoration:none;white-space:nowrap}
+.mbtn:hover{filter:brightness(1.05)}
+.mbtn.line{background:transparent;color:var(--m-ink);border-color:var(--m-line)}
+.mbtn.line:hover{border-color:var(--m-brand)}
+.mbtn[disabled]{opacity:.4;cursor:not-allowed}
+.mlink{border:0;background:none;color:var(--m-brand);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font:inherit;font-size:14px;padding:0}
+.mcard{background:var(--m-card);border:1px solid var(--m-line);border-radius:18px}
+.chero{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;padding-block:44px;align-items:start}
+@media (max-width:860px){.chero{grid-template-columns:1fr;gap:24px;padding-block:28px}}
+.chero h1{font-size:clamp(36px,6vw,56px);line-height:1.05;margin:10px 0 16px}
+.chero .lede{font-size:17px;color:var(--m-muted);max-width:48ch}
+.mm{display:flex;gap:8px 20px;flex-wrap:wrap;margin:22px 0;font-size:14px;color:var(--m-muted)}
+.mm b{color:var(--m-ink);font-weight:500}
+.learn{display:grid;gap:10px;margin-top:8px}
+.learn li{display:flex;gap:10px;font-size:15px}
+.learn li::before{content:"✓";color:var(--m-brand)}
+.learn{list-style:none;padding:0}
+.buy{padding:24px;display:grid;gap:14px;position:sticky;top:120px}
+.buy .cimg{height:150px;border-radius:12px;background:linear-gradient(135deg,#e9cfc8,#a6665c 70%,#5b332c)}
+.buy .price{font-family:var(--m-serif);font-size:38px;line-height:1}
+.buy small{color:var(--m-muted);font-size:13px}
+.buy ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;color:var(--m-muted)}
+.mtag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--m-brand);border:1px solid currentColor;border-radius:999px;padding:2px 9px;vertical-align:middle}
+.syll{padding-block:8px 60px}
+.syll h2{font-size:30px;margin-bottom:16px}
+.srow{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--m-line);font-size:15px}
+.srow span:last-child{color:var(--m-muted);font-size:14px;white-space:nowrap}
+/* learning area */
+.learnwrap{display:grid;grid-template-columns:300px 1fr;gap:24px;padding-block:28px 60px;align-items:start}
+@media (max-width:860px){.learnwrap{grid-template-columns:1fr}}
+.toc{padding:18px;display:grid;gap:4px;position:sticky;top:120px}
+@media (max-width:860px){.toc{position:static}}
+.toc h3{font-size:20px;margin-bottom:4px}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--m-muted);margin-bottom:10px}
+.prog .b{flex:1;height:6px;background:var(--m-soft);border-radius:99px;overflow:hidden}
+.prog .b i{display:block;height:100%;background:var(--m-brand);border-radius:99px;transition:width .4s}
+.toc button{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;text-align:left;border:0;background:none;padding:9px 8px;border-radius:10px;font:inherit;font-size:14.5px;color:var(--m-ink);cursor:pointer}
+.toc button:hover{background:var(--m-soft)}
+.toc button[aria-current="true"]{background:var(--m-soft)}
+.toc button small{display:block;color:var(--m-muted);font-size:12.5px}
+.tk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--m-line);display:grid;place-items:center;font-size:11px;color:#fff;margin-top:1px}
+.tk.done{background:var(--m-brand);border-color:var(--m-brand)}
+.tk.lock{border-style:dashed;color:var(--m-muted)}
+.toc .sep{height:1px;background:var(--m-line);margin:8px 0}
+.lesson{padding:28px;display:grid;gap:18px;min-width:0}
+.lesson h2{font-size:34px;line-height:1.1}
+.video{aspect-ratio:16/9;max-width:100%;border-radius:14px;background:linear-gradient(135deg,#3a2a26,#6e4038 60%,#a6665c);display:grid;place-items:center;color:#fff;position:relative;overflow:hidden;cursor:pointer;border:0;width:100%}
+.video .play{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;color:var(--m-brand);font-size:22px;padding-left:4px}
+.video .cap{position:absolute;left:16px;bottom:14px;font-size:13px;opacity:.85}
+.video.watched::after{content:"Watched";position:absolute;top:14px;right:14px;background:rgba(255,255,255,.92);color:var(--m-ink);font-size:12px;padding:3px 10px;border-radius:999px}
+.lesson .txt{font-size:16px;line-height:1.7;max-width:62ch;display:grid;gap:12px}
+.lesson .pdf{display:flex;align-items:center;gap:12px;border:1px solid var(--m-line);border-radius:12px;padding:12px 14px;font-size:14px}
+.lesson .pdf i{font-style:normal;background:var(--m-soft);color:var(--m-brand);border-radius:8px;padding:6px 8px;font-size:11px;font-weight:500;letter-spacing:.08em}
+.lnav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--m-line);padding-top:18px}
+.q{border:1px solid var(--m-line);border-radius:14px;padding:16px 18px;display:grid;gap:10px}
+.q h4{font-family:var(--m-sans);font-weight:500;font-size:16px}
+.q label{display:flex;gap:10px;align-items:center;border:1px solid var(--m-line);border-radius:10px;padding:10px 12px;cursor:pointer;font-size:15px}
+.q label:has(input:checked){border-color:var(--m-brand);background:var(--m-soft)}
+.q input{accent-color:var(--m-brand)}
+.q.right{border-color:#9ccfb5}.q.wrong{border-color:#e6b3a1}
+.q .fb{font-size:13.5px}
+.result{border-radius:14px;padding:18px;display:grid;gap:6px}
+.result.pass{background:#e8f4ec;color:#1f5b3c}.result.fail{background:#fbece6;color:#7a3420}
+.result b{font-family:var(--m-serif);font-weight:400;font-size:26px}
+.upl{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:520px){.upl{grid-template-columns:1fr 1fr}}
+.slot{aspect-ratio:1;max-width:100%;border:1.5px dashed var(--m-line);border-radius:14px;display:grid;place-items:center;text-align:center;color:var(--m-muted);font-size:13px;cursor:pointer;background:var(--m-card);background-size:cover;background-position:center;position:relative;padding:10px;font-family:inherit}
+.slot:hover{border-color:var(--m-brand)}
+.slot.filled{border-style:solid;border-color:transparent;color:transparent}
+.slot .lbl{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.92);color:var(--m-ink);border-radius:6px;padding:1px 7px;font-size:11.5px}
+.status{border-radius:14px;padding:14px 16px;font-size:14.5px;display:flex;gap:12px;align-items:flex-start}
+.status.wait{background:#fbf3e2;color:#6b4a0e}.status.chg{background:#fbece6;color:#7a3420}.status.ok{background:#e8f4ec;color:#1f5b3c}
+.reqs{display:grid;gap:10px}
+.req{display:flex;gap:12px;align-items:center;font-size:15px}
+.req .tk{width:26px;height:26px;font-size:13px}
+.cert{position:relative;background:#fffdfa;border:1px solid var(--m-line);border-radius:6px;padding:12px;box-shadow:0 20px 50px -24px rgba(60,30,20,.35)}
+.cert .in{border:1px solid var(--m-brand);outline:1px solid var(--m-brand);outline-offset:4px;padding:clamp(22px,5vw,48px) clamp(16px,5vw,48px);text-align:center;display:grid;gap:10px;margin:6px}
+.cert .k{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--m-brand)}
+.cert h2{font-size:clamp(28px,5vw,44px)}
+.cert .nm{font-family:var(--m-serif);font-size:clamp(30px,6vw,52px);border-bottom:1px solid var(--m-line);padding-bottom:6px;margin:6px auto 0;min-width:60%;overflow-wrap:anywhere}
+.cert .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:18px;text-align:left;font-size:13px;color:var(--m-muted)}
+.cert .sig{font-family:var(--m-serif);font-size:24px;color:var(--m-ink);border-bottom:1px solid var(--m-ink);padding:0 8px 2px;display:inline-block}
+.cert .seal{width:74px;height:74px;border-radius:50%;border:1px solid var(--m-brand);display:grid;place-items:center;font-family:var(--m-serif);color:var(--m-brand);font-size:12px;line-height:1.2;text-align:center}
+.verify{max-width:560px;margin:48px auto;padding:32px;text-align:center;display:grid;gap:12px}
+.verify .big{width:64px;height:64px;border-radius:50%;background:#e8f4ec;color:#1f5b3c;display:grid;place-items:center;font-size:28px;margin:0 auto}
+.verify dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;text-align:left;margin:12px 0 0;font-size:15px}
+.verify dt{color:var(--m-muted)}
+.verify dd{margin:0}
+.mfoot{border-top:1px solid var(--m-line);font-size:12.5px;color:var(--m-muted);text-align:center;padding-block:18px}
+.mfoot b{letter-spacing:.2em;font-weight:500;color:var(--m-ink)}
+
+/* modal + toast */
+.scrim{position:fixed;inset:0;background:rgba(20,16,30,.45);z-index:50;display:grid;place-items:center;padding:16px}
+.modal{background:var(--m-card);color:var(--m-ink);border-radius:20px;width:min(440px,100%);padding:26px;display:grid;gap:14px;font-family:var(--m-sans);max-height:calc(100vh - 32px);overflow-y:auto}
+.modal h3{font-family:var(--m-serif);font-weight:400;font-size:28px}
+.modal .f{display:grid;gap:6px}
+.modal label{font-size:13px;color:var(--m-muted)}
+.modal input{border:1px solid var(--m-line);border-radius:12px;padding:11px 13px;font:inherit;font-size:15px;background:#fff;color:var(--m-ink)}
+.modal .tot{display:flex;justify-content:space-between;font-size:15px;border-top:1px solid var(--m-line);padding-top:12px}
+.modal .fine{font-size:12.5px;color:var(--m-muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;background:#141b2e;color:#fff;font-size:14px;padding:12px 18px;border-radius:12px;max-width:calc(100% - 32px);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+
+
+<div class="demo-bar"><div class="in">
+  <div class="t"><span>Zoroliq Academy</span><small>CLICKABLE DEMO · SAMPLE DATA</small></div>
+  <div class="seg" role="group" aria-label="Switch view">
+    <button type="button" id="v-stu" aria-pressed="true">Student view</button>
+    <button type="button" id="v-own" aria-pressed="false">Chelsea's dashboard<span class="dot" id="v-dot" hidden></span></button>
+  </div>
+</div></div>
+<div class="guide"><div class="in"><b>Try it:</b><ol id="guide"></ol></div></div>
+
+<div id="view"></div>
+<div id="modal-root"></div>
+<input type="file" id="file" accept="image/*" hidden aria-label="Choose a practice photo">
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+/* ================= data (all sample) ================= */
+const COURSE={id:"classic",title:"Classic Lash Certification",price:1200,
+  lessons:[
+    {t:"Welcome and studio safety",m:"8 min",txt:["Welcome to Morph Beauty Academy! In this course you'll learn to apply classic lash extensions safely and confidently, from your first consultation to aftercare.","Before we start, watch this short video on keeping your station clean, sanitizing tools and protecting your client's eyes."],pdf:"Studio safety checklist"},
+    {t:"Eye and lash anatomy",m:"14 min",txt:["Healthy natural lashes are the foundation of every set. In this lesson we cover the lash growth cycle, how to spot lashes that aren't ready for an extension, and what to look out for during your consultation."],pdf:"Lash growth cycle diagram"},
+    {t:"Products, tools and adhesive",m:"18 min",txt:["Choosing the right length, curl and thickness for each client makes all the difference. You'll learn how adhesive behaves with temperature and humidity, and how to set up your tray before every appointment."],pdf:"Starter kit list"},
+    {t:"Isolation and application",m:"26 min",txt:["This is the heart of the course. Watch each step slowly, then practise on your mannequin head. Isolate one natural lash, dip, and place the extension about 1 mm from the lash line."],pdf:"Lash mapping template"},
+    {t:"Aftercare and retention",m:"10 min",txt:["Great retention keeps clients coming back. Learn what to tell clients after their appointment, how long to keep lashes dry, and when to book their first fill."],pdf:"Client aftercare card"}
+  ],
+  quiz:[
+    {q:"How many extensions go on each natural lash in a classic set?",o:["One","Two or three","Four to six"],a:0},
+    {q:"Where should the extension be placed?",o:["Directly on the skin","About 1 mm from the lash line","At the tip of the natural lash"],a:1},
+    {q:"What should you do before every new client's first application?",o:["Skip it if they've had lashes before","Complete a consultation and consent form","Test the adhesive on their skin"],a:1},
+    {q:"Why do you isolate each natural lash?",o:["So lashes don't stick together and can grow out naturally","To use less adhesive","To make the set look fuller"],a:0},
+    {q:"How long should clients keep their new lashes dry?",o:["No need to wait","About 24 to 48 hours","At least a week"],a:1}
+  ],
+  pass:80
+};
+const OTHER_COURSES=[
+  {title:"Volume Lash Course",cover:"b",lessons:6,students:7,price:1400,status:"Published"},
+  {title:"Spray Tan Training",cover:"c",lessons:4,students:0,price:650,status:"Draft"}];
+const STUDENTS=[
+  {n:"Jenna M.",c:"Classic Lash Certification",p:100,q:100,s:"Certified"},
+  {n:"Priya S.",c:"Classic Lash Certification",p:100,q:80,s:"Waiting for review"},
+  {n:"Kayla R.",c:"Classic Lash Certification",p:60,q:null,s:"In progress"},
+  {n:"Morgan T.",c:"Volume Lash Course",p:33,q:null,s:"In progress"},
+  {n:"Alexis D.",c:"Classic Lash Certification",p:100,q:60,s:"Needs to retake quiz"}];
+const CERTS=[
+  {no:"MBA-2026-0141",n:"Jenna M.",c:"Classic Lash Certification",d:"Nov 2, 2026"},
+  {no:"MBA-2026-0140",n:"Sam W.",c:"Volume Lash Course",d:"Oct 27, 2026"},
+  {no:"MBA-2026-0139",n:"Taylor B.",c:"Classic Lash Certification",d:"Oct 19, 2026"}];
+const PRODUCTS=[
+  {n:"Lash Mapping Guide (e-book)",p:29,s:18,k:"PDF download"},
+  {n:"Client Aftercare Cards (printable)",p:12,s:31,k:"PDF download"}];
+
+/* ================= state ================= */
+const S={view:"stu",stuScreen:"course",ownTab:"courses",ownEdit:false,
+  enrolled:false,name:"",email:"",cur:0,done:new Set(),watched:new Set(),
+  answers:{},quizResult:null,photos:[null,null,null],sub:"none",changeNote:"",cert:null,
+  priyaDone:false};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const money=n=>"$"+n.toLocaleString("en-CA");
+const today=()=>new Date().toLocaleDateString("en-CA",{month:"short",day:"numeric",year:"numeric"});
+function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>t.hidden=true,3400)}
+const firstName=()=>(S.name.trim().split(/\s+/)[0]||"there");
+const lessonsDone=()=>S.done.size===COURSE.lessons.length;
+const quizPassed=()=>S.quizResult&&S.quizResult.pct>=COURSE.pass;
+
+/* ================= guide ================= */
+function guide(){
+  const steps=[
+    ["Enroll in the course",S.enrolled],
+    ["Finish the lessons",lessonsDone()],
+    ["Pass the quiz",!!quizPassed()],
+    ["Upload practice photos",S.sub!=="none"],
+    ["Switch to Chelsea's dashboard and approve them",S.sub==="approved"],
+    ["See your certificate",S.sub==="approved"&&S.stuScreen==="cert"]];
+  $("guide").innerHTML=steps.map(([t,d])=>`<li class="${d?"done":""}">${t}</li>`).join("");
+  $("v-dot").hidden=!(S.sub==="pending"&&S.view==="stu");
+}
+
+/* ================= view switch ================= */
+function setView(v){S.view=v;$("v-stu").setAttribute("aria-pressed",v==="stu");$("v-own").setAttribute("aria-pressed",v==="own");render();scrollTo(0,0)}
+$("v-stu").onclick=()=>setView("stu");$("v-own").onclick=()=>setView("own");
+function render(){S.view==="own"?renderOwner():renderStudent();guide()}
+
+/* ================= OWNER ================= */
+const ICONS={
+ overview:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+ bookings:'<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+ clients:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+ waitlist:'<path d="M5 22h14M5 2h14M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2"/>',
+ services:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>',
+ availability:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+ staff:'<circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="18" cy="17" r="3"/>',
+ forms:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
+ inventory:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+ payments:'<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+ reports:'<path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/>',
+ automations:'<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+ academy:'<path d="M22 10 12 5 2 10l10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>'};
+const NAV=[["DAILY",[["overview","Overview"],["calendar","Calendar"],["bookings","Bookings"],["clients","Clients"],["waitlist","Waitlist"]]],
+  ["SETUP",[["services","Services"],["availability","Availability"],["staff","Staff"],["forms","Forms & Consent"],["inventory","Inventory"]]],
+  ["GROWTH",[["payments","Payments"],["reports","Reports"],["automations","Automations"],["academy","Academy"]]]];
+const svg=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
+
+function pendingList(){
+  const list=[];
+  if(S.sub==="pending")list.push({me:true,n:S.name||"Demo Student",d:"Just now",note:S.photoNote||"",photos:S.photos});
+  if(!S.priyaDone)list.push({me:false,n:"Priya S.",d:"Nov 8, 2026",note:"Third full set on my mannequin. I worked on keeping the inner corners shorter like you showed us.",photos:["ph1","ph2","ph3"]});
+  return list;
+}
+function renderOwner(){
+  const pend=pendingList().length;
+  const certs=(S.cert?[{no:S.cert.no,n:S.name||"Demo Student",c:COURSE.title,d:S.cert.date,me:true}]:[]).concat(S.priyaDone?[{no:"MBA-2026-0142",n:"Priya S.",c:COURSE.title,d:today()}]:[]).concat(CERTS);
+  const nav=NAV.map(([g,items])=>`<div class="grp">${g}</div>`+items.map(([k,l])=>`<button type="button" data-nav="${k}" ${k==="academy"?'aria-current="page"':""}>${svg(k)}<span>${l}</span>${k==="academy"?'<span class="new">NEW</span>':""}</button>`).join("")).join("");
+  let body="";
+  if(S.ownEdit){body=editorHTML()}
+  else{
+    const tabs=[["courses","Courses"],["students","Students"],["subs","Submissions"],["certs","Certificates"],["products","Digital products"]];
+    body=`<div class="ph"><div><h1>Academy</h1><p>Sell online courses, review practice work and issue certificates.</p></div><button class="btn" type="button" id="newc">+ New course</button></div>
+    <div class="stats">
+      <div class="card stat"><small>Students enrolled</small><b>${24+(S.enrolled?1:0)}</b></div>
+      <div class="card stat"><small>Course sales this month</small><b>${money(3840+(S.enrolled?COURSE.price:0))}</b></div>
+      <div class="card stat"><small>Certificates issued</small><b>${11+certs.length-CERTS.length}</b></div>
+      <div class="card stat ${pend?"hl":""}"><small>Waiting for your review</small><b>${pend}</b></div>
+    </div>
+    <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" type="button" data-tab="${k}" aria-selected="${S.ownTab===k}">${l}${k==="subs"&&pend?`<span class="count">${pend}</span>`:""}</button>`).join("")}</div>
+    <div id="tabbody">${ownTab(certs)}</div>`;
+  }
+  $("view").innerHTML=`<div class="app">
+    <aside class="side"><div class="logo"><div class="z">Z</div><span>ZOROLIQ</span></div>
+      <div class="biz"><div class="ini">MB</div><div><b>Morph Beauty Co.</b><small>OWNER</small></div></div>
+      <nav class="nav" aria-label="Dashboard">${nav}</nav></aside>
+    <div class="main"><div class="topbar"><div class="logo mlogo"><div class="z">Z</div><span>ZOROLIQ</span></div><div class="search">Search…</div><div class="av">C</div></div>
+      <div class="page">${body}</div></div></div>`;
+  document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{if(b.dataset.nav!=="academy")toast("That part of Zoroliq isn't in this demo. Academy is the new part.");else{S.ownEdit=false;render()}});
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{S.ownTab=b.dataset.tab;render()});
+  const nc=$("newc");if(nc)nc.onclick=()=>{S.ownEdit=true;render();scrollTo(0,0)};
+  wireOwner();
+}
+function ownTab(certs){
+  if(S.ownTab==="courses"){
+    return `<div class="grid2">
+      <div class="card course"><div class="cover"><span class="pill ok on-cover">Published</span></div><div class="body"><h3>${COURSE.title}</h3>
+        <div class="meta"><span>${COURSE.lessons.length} lessons + quiz</span><span>${17+(S.enrolled?1:0)} students</span><span>Pass mark ${COURSE.pass}%</span></div>
+        <div class="meta"><span>Certificate: quiz + approved practice photos</span></div></div>
+        <div class="foot"><b>${money(COURSE.price)}</b><button class="btn sec sm" type="button" data-edit>Edit course</button></div></div>
+      ${OTHER_COURSES.map(c=>`<div class="card course"><div class="cover ${c.cover}"><span class="pill ${c.status==="Published"?"ok":"mut"} on-cover">${c.status}</span></div><div class="body"><h3>${c.title}</h3>
+        <div class="meta"><span>${c.lessons} lessons + quiz</span><span>${c.students} students</span></div></div>
+        <div class="foot"><b>${money(c.price)}</b><button class="btn sec sm" type="button" data-edit>Edit course</button></div></div>`).join("")}
+    </div>`;
+  }
+  if(S.ownTab==="students"){
+    const rows=(S.enrolled?[{me:true,n:S.name||"Demo Student",c:COURSE.title,p:Math.round(S.done.size/COURSE.lessons.length*100),q:S.quizResult?S.quizResult.pct:null,
+      s:S.sub==="approved"?"Certified":S.sub==="pending"?"Waiting for review":S.sub==="changes"?"Changes requested":S.quizResult&&!quizPassed()?"Needs to retake quiz":"In progress"}]:[])
+      .concat(STUDENTS.map(x=>x.n==="Priya S."&&S.priyaDone?{...x,s:"Certified"}:x));
+    const pill=s=>s==="Certified"?"ok":s==="Waiting for review"?"warn":s.startsWith("Needs")||s.startsWith("Changes")?"bad":"blue";
+    return `<div class="card tablewrap"><table class="t"><thead><tr><th>Student</th><th>Course</th><th>Progress</th><th>Quiz</th><th>Status</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr><td><div class="who ${r.me?"me":""}"><div class="i">${esc(r.n.slice(0,1).toUpperCase())}</div><div>${esc(r.n)}${r.me?' <span class="pill blue">You</span>':""}</div></div></td><td>${esc(r.c)}</td>
+      <td><div style="display:flex;align-items:center;gap:10px"><div class="bar"><i style="width:${r.p}%"></i></div><span class="num">${r.p}%</span></div></td>
+      <td class="num">${r.q==null?"–":r.q+"%"}</td><td><span class="pill ${pill(r.s)}">${r.s}</span></td></tr>`).join("")}
+      </tbody></table></div>`;
+  }
+  if(S.ownTab==="subs"){
+    const list=pendingList();
+    if(!list.length)return `<div class="card empty"><b>You're all caught up</b>When students upload practice photos, they'll show up here for you to approve.</div>`;
+    return `<div style="display:grid;gap:14px">${list.map((x,i)=>`<div class="card sub">
+      <div class="sub-head"><div class="who ${x.me?"me":""}"><div class="i">${esc(x.n.slice(0,1).toUpperCase())}</div><div><b>${esc(x.n)}</b>${x.me?' <span class="pill blue">You</span>':""}<div class="meta">${COURSE.title} · Quiz ${x.me?S.quizResult.pct:80}% · Submitted ${x.d}</div></div></div><span class="pill warn">Waiting for review</span></div>
+      <div class="thumbs">${x.photos.map((p,k)=>p?`<div class="thumb ${typeof p==="string"?p:(p.cls||"")}" style="${p&&p.src?`background-image:url('${p.src}')`:""}"><span>Photo ${k+1}</span></div>`:"").join("")}</div>
+      ${x.note?`<div class="note">"${esc(x.note)}"</div>`:""}
+      <div class="acts"><button class="btn ok" type="button" data-approve="${x.me?"me":"priya"}">Approve and issue certificate</button>
+        <button class="btn sec" type="button" data-changes="${x.me?"me":"priya"}">Ask for changes</button></div>
+      <div class="chg" data-chgbox="${x.me?"me":"priya"}" hidden><div class="field" style="margin:0"><label for="chg-${i}">What should they fix?</label><textarea id="chg-${i}" rows="2">Your inner corners are a little long. Try going one length shorter and send a new photo of the left eye.</textarea></div>
+        <div class="acts" style="margin-top:8px"><button class="btn sm" type="button" data-sendchg="${x.me?"me":"priya"}" data-ta="chg-${i}">Send to student</button></div></div>
+    </div>`).join("")}</div>`;
+  }
+  if(S.ownTab==="certs"){
+    return `<div class="card tablewrap"><table class="t"><thead><tr><th>Certificate no.</th><th>Student</th><th>Course</th><th>Issued</th><th></th></tr></thead><tbody>
+      ${certs.map(c=>`<tr><td class="num" style="font-family:var(--mono);font-size:13px">${c.no}</td><td>${esc(c.n)}${c.me?' <span class="pill blue">You</span>':""}</td><td>${esc(c.c)}</td><td>${c.d}</td><td style="text-align:right">${c.me?'<button class="btn sec sm" type="button" data-viewcert>View</button>':'<button class="btn sec sm" type="button" data-resend>Resend</button>'}</td></tr>`).join("")}
+      </tbody></table></div>`;
+  }
+  return `<div class="grid2">${PRODUCTS.map(p=>`<div class="card course"><div class="cover c" style="height:90px"><span class="pill mut on-cover">${p.k}</span></div><div class="body"><h3>${p.n}</h3><div class="meta"><span>${p.s} sold</span><span>Download link emailed after purchase</span></div></div><div class="foot"><b>${money(p.p)}</b><button class="btn sec sm" type="button" data-noop>Edit</button></div></div>`).join("")}
+    <div class="card empty" style="display:grid;place-items:center"><div><b>Sell another download</b>E-books, templates and guides.<div style="margin-top:12px"><button class="btn sm" type="button" data-noop>+ Add product</button></div></div></div></div>`;
+}
+function editorHTML(){
+  return `<button class="back" type="button" id="back">← Back to Academy</button>
+  <div class="ph"><div><h1>${COURSE.title}</h1><p>Changes show up for students as soon as you save.</p></div><div style="display:flex;gap:8px"><button class="btn sec" type="button" id="prev">Preview as student</button><button class="btn" type="button" id="save">Save</button></div></div>
+  <div class="ed">
+    <div style="display:grid;gap:16px">
+      <div class="card"><h3>Lessons</h3><div id="lrows">${COURSE.lessons.map((l,i)=>lrow(l.t,l.m,"▶")).join("")}${lrow("Final quiz",COURSE.quiz.length+" questions","?")}${lrow("Practice photos","3 photos, reviewed by you","◎")}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sec sm" type="button" id="addl">+ Add lesson</button><button class="btn sec sm" type="button" data-noop>+ Add quiz question</button></div></div>
+      <div class="card"><h3>Course page</h3>
+        <div class="field"><label for="ct">Title</label><input id="ct" value="${COURSE.title}"></div>
+        <div class="field"><label for="cd">Short description</label><textarea id="cd" rows="3">Learn to apply classic lash extensions safely and confidently, from consultation to aftercare. Includes your certificate once you pass.</textarea></div></div>
+    </div>
+    <div style="display:grid;gap:16px">
+      <div class="card"><h3>Price and access</h3>
+        <div class="field"><label for="cp">Price (CAD)</label><input id="cp" value="${COURSE.price}" inputmode="numeric"></div>
+        <div class="field"><label for="ca">Access</label><select id="ca"><option>12 months</option><option>Lifetime</option><option>6 months</option></select></div>
+        <label class="check"><input type="checkbox" id="pp"><span>Allow payment plans<small>Coming later</small></span></label></div>
+      <div class="card"><h3>Certificate requirements</h3>
+        <label class="check"><input type="checkbox" checked><span>Finish every lesson</span></label>
+        <label class="check"><input type="checkbox" checked><span>Pass the quiz<small>Pass mark: <b>${COURSE.pass}%</b>. Students can retake it.</small></span></label>
+        <label class="check"><input type="checkbox" checked><span>Practice photos approved by you</span></label>
+        <label class="check"><input type="checkbox"><span>Book and complete an in-studio practical<small>Uses your Zoroliq calendar. Coming later.</small></span></label>
+        <div class="field" style="margin-top:8px"><label for="cn">Certificate number starts with</label><input id="cn" value="MBA-2026-"></div></div>
+    </div>
+  </div>`;
+}
+const lrow=(t,m,ic)=>`<div class="lrow"><span class="h" aria-hidden="true">⋮⋮</span><span class="ic">${ic}</span><div>${esc(t)}<br><small>${esc(m)}</small></div><button class="btn sec sm" type="button" data-noop>Edit</button></div>`;
+function wireOwner(){
+  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{S.ownEdit=true;render();scrollTo(0,0)});
+  document.querySelectorAll("[data-noop]").forEach(b=>b.onclick=()=>toast("This button is just for show in the demo."));
+  document.querySelectorAll("[data-resend]").forEach(b=>b.onclick=()=>toast("Certificate emailed to the student again."));
+  document.querySelectorAll("[data-viewcert]").forEach(b=>b.onclick=()=>{S.stuScreen="cert";setView("stu")});
+  if($("back"))$("back").onclick=()=>{S.ownEdit=false;render()};
+  if($("save"))$("save").onclick=()=>{const t=$("ct").value.trim();if(t)COURSE.title=t;const p=parseInt($("cp").value.replace(/[^0-9]/g,""),10);if(p)COURSE.price=p;toast("Course saved");S.ownEdit=false;render()};
+  if($("prev"))$("prev").onclick=()=>{S.stuScreen=S.enrolled?"learn":"course";setView("stu")};
+  if($("addl"))$("addl").onclick=()=>{const r=$("lrows");r.insertAdjacentHTML("beforeend",lrow("New lesson","Add a video, text or PDF","▶"));toast("Lesson added. In the real version you'd add the video and text next.")};
+  document.querySelectorAll("[data-approve]").forEach(b=>b.onclick=()=>{
+    if(b.dataset.approve==="me"){S.sub="approved";S.cert={no:"MBA-2026-0143",date:today()};toast(`Certificate issued and emailed to ${S.name||"the student"}. Switch to Student view to see it.`)}
+    else{S.priyaDone=true;toast("Certificate issued and emailed to Priya S.")}
+    render()});
+  document.querySelectorAll("[data-changes]").forEach(b=>b.onclick=()=>{const box=document.querySelector(`[data-chgbox="${b.dataset.changes}"]`);box.hidden=!box.hidden});
+  document.querySelectorAll("[data-sendchg]").forEach(b=>b.onclick=()=>{const note=$(b.dataset.ta).value.trim();
+    if(b.dataset.sendchg==="me"){S.sub="changes";S.changeNote=note;toast("Sent. The student will see your note and can upload new photos.")}
+    else{S.priyaDone=true;toast("Note sent to Priya S.")}
+    render()});
+}
+
+/* ================= STUDENT ================= */
+function shell(inner,tab){
+  return `<div class="stu"><header class="mhead"><div class="wrap"><div class="brand">Morph Beauty Co.<small>ACADEMY</small></div>
+    <div class="mtabs"><span>Book</span><span class="${tab==="courses"?"on":""}">Courses</span>${S.enrolled?`<span class="${tab==="mine"?"on":""}">My learning</span>`:""}</div></div></header>
+    ${inner}<div class="mfoot">Morph Beauty Academy · Red Deer, Alberta · Powered by <b>ZOROLIQ</b></div></div>`;
+}
+function renderStudent(){
+  const sc=S.stuScreen;
+  if(sc==="verify")return renderVerify();
+  if(sc==="course"||!S.enrolled){S.stuScreen="course";return renderCourse()}
+  renderLearn();
+}
+function renderCourse(){
+  $("view").innerHTML=shell(`<div class="wrap"><div class="chero"><div>
+    <span class="mtag">Online course · Certificate included</span>
+    <h1>${esc(COURSE.title)}</h1>
+    <p class="lede">Learn to apply classic lash extensions safely and confidently, from your first consultation to aftercare. Study online at your own pace, then earn your certificate from Morph Beauty Academy.</p>
+    <div class="mm"><span><b>${COURSE.lessons.length}</b> video lessons</span><span><b>Final quiz</b> · pass mark ${COURSE.pass}%</span><span><b>Practice photos</b> reviewed by Chelsea</span><span><b>12 months</b> access</span></div>
+    <ul class="learn"><li>Lash anatomy and how to check natural lashes are healthy</li><li>Isolation, placement and lash mapping</li><li>Consultations, consent forms and studio safety</li><li>Aftercare that keeps clients coming back</li></ul>
+    <div style="margin-top:22px;display:flex;align-items:center;gap:14px"><div class="who"><div class="i" style="background:var(--m-soft);color:var(--m-brand);font-family:var(--m-serif);width:46px;height:46px;font-size:18px">CR</div></div><div><b style="font-weight:500">Taught by Chelsea Rae</b><br><span style="color:var(--m-muted);font-size:14px">Founder and lead educator, Morph Beauty Academy</span></div></div>
+  </div>
+  <aside class="mcard buy"><div class="cimg" role="img" aria-label="Course cover photo"></div>
+    <div><div class="price">${money(COURSE.price)}</div><small>CAD · one-time payment · <span class="mtag" style="font-size:9.5px">Sample price</span></small></div>
+    <button class="mbtn" type="button" id="enroll">${S.enrolled?"Go to my course":"Enroll now"}</button>
+    <ul><li>✓ Start right away</li><li>✓ Certificate of Completion once you pass</li><li>✓ Login link sent to your email, no password</li></ul>
+  </aside></div>
+  <div class="syll"><h2>What's inside</h2>${COURSE.lessons.map((l,i)=>`<div class="srow"><span>${i+1}. ${esc(l.t)}</span><span>${l.m}</span></div>`).join("")}
+    <div class="srow"><span>Final quiz</span><span>${COURSE.quiz.length} questions</span></div><div class="srow"><span>Practice photos and certificate</span><span>Reviewed by Chelsea</span></div></div></div>`,"courses");
+  $("enroll").onclick=()=>{if(S.enrolled){S.stuScreen="learn";render()}else openCheckout()};
+}
+function openCheckout(){
+  $("modal-root").innerHTML=`<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="ck-t">
+    <span class="mtag" style="justify-self:start">Sample checkout</span><h3 id="ck-t">Enroll in ${esc(COURSE.title)}</h3>
+    <div class="f"><label for="ck-n">Your full name (this goes on your certificate)</label><input id="ck-n" autocomplete="off" placeholder="e.g. Jordan Lee" value="${esc(S.name)}"></div>
+    <div class="f"><label for="ck-e">Email</label><input id="ck-e" autocomplete="off" placeholder="you@example.com" value="${esc(S.email)}"></div>
+    <div class="f"><label for="ck-c">Card</label><input id="ck-c" autocomplete="off" value="4242 4242 4242 4242 · 12/28 · 123" readonly></div>
+    <div class="tot"><span>Total</span><b>${money(COURSE.price)} CAD</b></div>
+    <button class="mbtn" type="button" id="pay">Pay and enroll</button>
+    <p class="fine">Demo only, no real payment is taken. In the real version, payment goes straight to Morph's Stripe account, and you get an email with your login link.</p>
+    <button class="mlink" type="button" id="ck-x" style="justify-self:center">Cancel</button></div></div>`;
+  $("ck-n").focus();
+  $("ck-x").onclick=closeModal;$("scrim").onclick=e=>{if(e.target.id==="scrim")closeModal()};
+  $("pay").onclick=()=>{const n=$("ck-n").value.trim();if(!n){$("ck-n").focus();toast("Add your name. It goes on your certificate.");return}
+    S.name=n;S.email=$("ck-e").value.trim();S.enrolled=true;S.stuScreen="learn";S.cur=0;closeModal();render();scrollTo(0,0);
+    toast(`You're enrolled, ${firstName()}! We emailed your login link.`)};
+}
+function closeModal(){$("modal-root").innerHTML=""}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("modal-root").innerHTML)closeModal()});
+
+const ITEMS=()=>COURSE.lessons.map((l,i)=>({k:"l"+i,t:l.t,m:l.m,i})).concat([{k:"quiz",t:"Final quiz",m:COURSE.quiz.length+" questions"},{k:"photos",t:"Practice photos",m:"3 photos"},{k:"cert",t:"Your certificate",m:""}]);
+function itemState(k){
+  if(k.startsWith("l"))return S.done.has(+k.slice(1))?"done":"";
+  if(k==="quiz")return quizPassed()?"done":lessonsDone()?"":"lock";
+  if(k==="photos")return S.sub==="approved"?"done":quizPassed()?"":"lock";
+  return S.sub==="approved"?"done":"lock";
+}
+function renderLearn(){
+  const sc=S.stuScreen==="learn"?"l"+S.cur:S.stuScreen;
+  const pct=Math.round((S.done.size+(quizPassed()?1:0)+(S.sub==="approved"?1:0))/(COURSE.lessons.length+2)*100);
+  const toc=ITEMS().map(it=>{const st=itemState(it.k);return `<button type="button" data-go="${it.k}" aria-current="${sc===it.k}"><span class="tk ${st}">${st==="done"?"✓":st==="lock"?"🔒":""}</span><span>${esc(it.t)}${it.m?`<small>${it.m}</small>`:""}</span></button>${it.k==="l"+(COURSE.lessons.length-1)?'<div class="sep"></div>':""}`}).join("");
+  let main="";
+  if(sc.startsWith("l"))main=lessonHTML(+sc.slice(1));
+  else if(sc==="quiz")main=quizHTML();
+  else if(sc==="photos")main=photosHTML();
+  else main=certHTML();
+  $("view").innerHTML=shell(`<div class="wrap learnwrap">
+    <aside class="mcard toc"><h3>${esc(COURSE.title)}</h3><div class="prog"><div class="b"><i style="width:${pct}%"></i></div><span>${pct}%</span></div>${toc}
+      <div class="sep"></div><button type="button" id="skip" style="grid-template-columns:1fr;color:var(--m-muted);font-size:13px">Demo shortcut: mark all lessons done</button>
+      <button type="button" id="tocourse" style="grid-template-columns:1fr;color:var(--m-muted);font-size:13px">See the course page</button></aside>
+    <section class="mcard lesson">${main}</section></div>`,"mine");
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const k=b.dataset.go;const st=itemState(k);
+    if(st==="lock"){toast(k==="quiz"?"Finish the lessons to unlock the quiz.":k==="photos"?"Pass the quiz to unlock practice photos.":"Your certificate unlocks once Chelsea approves your practice photos.");return}
+    if(k.startsWith("l")){S.stuScreen="learn";S.cur=+k.slice(1)}else S.stuScreen=k;render()});
+  $("skip").onclick=()=>{COURSE.lessons.forEach((_,i)=>{S.done.add(i);S.watched.add(i)});S.stuScreen="quiz";render();toast("All lessons marked done. On to the quiz!")};
+  $("tocourse").onclick=()=>{S.stuScreen="course";render();scrollTo(0,0)};
+  wireLearn(sc);
+}
+function lessonHTML(i){
+  const l=COURSE.lessons[i],last=i===COURSE.lessons.length-1;
+  return `<span class="mtag" style="justify-self:start">Lesson ${i+1} of ${COURSE.lessons.length} · ${l.m}</span><h2>${esc(l.t)}</h2>
+    <button class="video ${S.watched.has(i)?"watched":""}" type="button" id="vid" aria-label="Play video"><span class="play">▶</span><span class="cap">Video lesson · ${l.m} · sample</span></button>
+    <div class="txt">${l.txt.map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+    <div class="pdf"><i>PDF</i><span>${esc(l.pdf)}</span><button class="mlink" type="button" id="dl" style="margin-left:auto">Download</button></div>
+    <div class="lnav">${i>0?'<button class="mbtn line" type="button" id="prevl">Previous</button>':"<span></span>"}<button class="mbtn" type="button" id="donel">${S.done.has(i)?(last?"Go to the quiz":"Next lesson"):(last?"Mark complete and go to quiz":"Mark complete and continue")}</button></div>`;
+}
+function quizHTML(){
+  const r=S.quizResult,checked=!!r;
+  return `<span class="mtag" style="justify-self:start">Final quiz · pass mark ${COURSE.pass}%</span><h2>Final quiz</h2><p style="color:var(--m-muted)">Answer all ${COURSE.quiz.length} questions. You can retake it as many times as you need.</p>
+  ${r?`<div class="result ${r.pct>=COURSE.pass?"pass":"fail"}"><b>${r.pct>=COURSE.pass?"You passed!":"Not quite yet"}</b><span>You scored ${r.pct}% (${r.right} of ${COURSE.quiz.length}). ${r.pct>=COURSE.pass?"Next, upload your practice photos.":"Review the lessons and try again. You need "+COURSE.pass+"% to pass."}</span></div>`:""}
+  <div style="display:grid;gap:12px" id="qz">${COURSE.quiz.map((q,qi)=>{const sel=S.answers[qi];const cls=checked?(sel===q.a?"right":"wrong"):"";
+    return `<fieldset class="q ${cls}" style="margin:0"><legend class="sr" style="position:absolute;left:-9999px">Question ${qi+1}</legend><h4>${qi+1}. ${esc(q.q)}</h4>${q.o.map((o,oi)=>`<label><input type="radio" name="q${qi}" value="${oi}" ${sel===oi?"checked":""} ${checked&&r.pct>=COURSE.pass?"disabled":""}> ${esc(o)}</label>`).join("")}
+    ${checked&&sel!==q.a?`<div class="fb" style="color:#7a3420">Not quite. Have another look at this one.</div>`:checked?`<div class="fb" style="color:#1f5b3c">Correct</div>`:""}</fieldset>`}).join("")}</div>
+  <div class="lnav">${r&&r.pct<COURSE.pass?'<button class="mbtn line" type="button" id="retry">Try again</button>':"<span></span>"}
+    ${r&&r.pct>=COURSE.pass?'<button class="mbtn" type="button" id="tophotos">Upload practice photos</button>':`<button class="mbtn" type="button" id="submitq" ${r?"hidden":""}>Submit answers</button>`}</div>`;
+}
+function photosHTML(){
+  const n=S.photos.filter(Boolean).length;
+  let status="";
+  if(S.sub==="pending")status=`<div class="status wait"><span>⏳</span><span><b style="font-weight:500">Sent to Chelsea for review.</b> You'll get an email when she's had a look. <br><span style="font-size:13px">Demo: switch to <b style="font-weight:500">Chelsea's dashboard</b> at the top and open Submissions to approve it.</span></span></div>`;
+  if(S.sub==="changes")status=`<div class="status chg"><span>✎</span><span><b style="font-weight:500">Chelsea asked for a few changes:</b><br>"${esc(S.changeNote)}"<br><span style="font-size:13px">Swap any photo below, then send it again.</span></span></div>`;
+  if(S.sub==="approved")status=`<div class="status ok"><span>✓</span><span><b style="font-weight:500">Approved by Chelsea.</b> Your certificate is ready.</span></div>`;
+  const locked=S.sub==="pending"||S.sub==="approved";
+  return `<span class="mtag" style="justify-self:start">Practical work</span><h2>Practice photos</h2>
+  <p style="color:var(--m-muted);max-width:60ch">Upload 3 clear photos of a full classic set you've done on your mannequin: one straight on, and one of each eye from the side. Chelsea reviews every set before your certificate is issued.</p>
+  ${status}
+  <div class="upl">${S.photos.map((p,i)=>`<button class="slot ${p?"filled "+(p.cls||""):""}" type="button" data-slot="${i}" ${locked?"disabled":""} style="${p&&p.src?`background-image:url('${p.src}')`:""}">${p?"":`+ Add photo ${i+1}<br><span style="font-size:12px">${["Straight on","Left eye","Right eye"][i]}</span>`}${p?`<span class="lbl">${["Straight on","Left eye","Right eye"][i]}</span>`:""}</button>`).join("")}</div>
+  ${locked?"":`<button class="mlink" type="button" id="samplep" style="justify-self:start">Demo shortcut: use sample photos</button>
+  <div class="f" style="display:grid;gap:6px"><label for="pnote" style="font-size:13px;color:var(--m-muted)">Note for Chelsea (optional)</label><textarea id="pnote" rows="2" style="border:1px solid var(--m-line);border-radius:12px;padding:10px 12px;font:inherit;background:#fff;color:var(--m-ink)">${esc(S.photoNote||"")}</textarea></div>`}
+  <div class="lnav"><span></span>${S.sub==="approved"?'<button class="mbtn" type="button" id="tocert">See my certificate</button>':locked?"":`<button class="mbtn" type="button" id="sendp" ${n<3?"disabled":""}>Send to Chelsea for review</button>`}</div>`;
+}
+function certHTML(){
+  const c=S.cert;
+  return `<span class="mtag" style="justify-self:start">Certificate</span><h2>You're certified, ${esc(firstName())}!</h2>
+  <div class="cert"><div class="in">
+    <div class="k">Morph Beauty Academy</div><h2>Certificate of Completion</h2>
+    <div style="color:var(--m-muted)">This certifies that</div><div class="nm">${esc(S.name||"Demo Student")}</div>
+    <div style="color:var(--m-muted)">has successfully completed</div><div style="font-family:var(--m-serif);font-size:24px">${esc(COURSE.title)}</div>
+    <div class="row"><div><span class="sig">Chelsea Rae</span><br>Chelsea Rae, Founder and Lead Educator</div><div class="seal">Morph<br>Beauty<br>Academy</div><div style="text-align:right">Issued ${c.date}<br>Certificate no. <b style="font-weight:500;color:var(--m-ink)">${c.no}</b></div></div>
+    <div style="font-size:12px;color:var(--m-muted);margin-top:8px">Check this certificate at app.zoroliq.com/certificate/${c.no}</div>
+  </div></div>
+  <div class="lnav"><button class="mbtn line" type="button" id="verifyb">See the check page</button><button class="mbtn" type="button" id="pdfb">Download PDF</button></div>`;
+}
+function wireLearn(sc){
+  if(sc.startsWith("l")){const i=+sc.slice(1),last=i===COURSE.lessons.length-1;
+    $("vid").onclick=()=>{S.watched.add(i);$("vid").classList.add("watched");toast("In the real course, the video plays here.")};
+    $("dl").onclick=()=>toast("In the real course, the PDF downloads here.");
+    if($("prevl"))$("prevl").onclick=()=>{S.cur=i-1;render();scrollTo(0,0)};
+    $("donel").onclick=()=>{S.done.add(i);if(last){S.stuScreen="quiz"}else S.cur=i+1;render();scrollTo(0,0);if(!last)toast("Lesson complete")}}
+  if(sc==="quiz"){
+    $("qz").addEventListener("change",e=>{if(e.target.name)S.answers[+e.target.name.slice(1)]=+e.target.value});
+    if($("submitq"))$("submitq").onclick=()=>{if(Object.keys(S.answers).length<COURSE.quiz.length){toast("Answer every question first.");return}
+      const right=COURSE.quiz.filter((q,i)=>S.answers[i]===q.a).length;S.quizResult={right,pct:Math.round(right/COURSE.quiz.length*100)};render();scrollTo(0,0)};
+    if($("retry"))$("retry").onclick=()=>{S.quizResult=null;S.answers={};render();scrollTo(0,0)};
+    if($("tophotos"))$("tophotos").onclick=()=>{S.stuScreen="photos";render();scrollTo(0,0)}}
+  if(sc==="photos"){
+    let slot=0;
+    document.querySelectorAll("[data-slot]").forEach(b=>b.onclick=()=>{slot=+b.dataset.slot;$("file").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{S.photos[slot]={src:r.result};savenote();render()};r.readAsDataURL(f);e.target.value=""};$("file").click()});
+    const savenote=()=>{const t=$("pnote");if(t)S.photoNote=t.value.trim()};
+    if($("samplep"))$("samplep").onclick=()=>{S.photos=[{cls:"ph1"},{cls:"ph2"},{cls:"ph3"}];savenote();render()};
+    if($("sendp"))$("sendp").onclick=()=>{savenote();S.sub="pending";render();toast("Sent to Chelsea! Now switch to Chelsea's dashboard to approve it.")};
+    if($("tocert"))$("tocert").onclick=()=>{S.stuScreen="cert";render();scrollTo(0,0)}}
+  if(sc==="cert"){
+    $("verifyb").onclick=()=>{S.stuScreen="verify";render();scrollTo(0,0)};
+    $("pdfb").onclick=()=>toast("In the real version, this downloads the certificate as a PDF.")}
+}
+function renderVerify(){
+  const c=S.cert;
+  $("view").innerHTML=shell(`<div class="wrap"><div class="mcard verify">
+    <div class="big">✓</div><h2 style="font-size:32px">This certificate is valid</h2>
+    <p style="color:var(--m-muted)">Anyone with the certificate number can check it here, like an insurance provider or a future employer.</p>
+    <dl><dt>Name</dt><dd>${esc(S.name)}</dd><dt>Course</dt><dd>${esc(COURSE.title)}</dd><dt>Issued by</dt><dd>Morph Beauty Academy, Red Deer, AB</dd><dt>Educator</dt><dd>Chelsea Rae</dd><dt>Issued</dt><dd>${c.date}</dd><dt>Certificate no.</dt><dd>${c.no}</dd></dl>
+    <p style="font-size:12.5px;color:var(--m-muted);margin-top:8px">app.zoroliq.com/certificate/${c.no}</p>
+    <button class="mbtn line" type="button" id="backc" style="justify-self:center">Back to my certificate</button></div></div>`,"mine");
+  $("backc").onclick=()=>{S.stuScreen="cert";render();scrollTo(0,0)};
+}
+
+/* /* certificate wording note: "Certificate of Completion" from the academy. */
+render();
+</script>
+
+</body>
+</html>
