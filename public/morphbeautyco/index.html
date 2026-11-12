@@ -150,11 +150,12 @@ header.nav .btn{padding:11px 20px;font-size:11.5px}
 .reviews{padding-block:60px 120px}
 .reviews .top{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
 .reviews h2{font-size:clamp(32px,4vw,46px)}
-.rv{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.rv{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 @media (max-width:860px){.rv{grid-template-columns:1fr}}
-.rv figure{margin:0;background:var(--paper);border:1px solid var(--line);padding:32px;display:grid;gap:18px;align-content:space-between;min-height:220px}
+.rv figure{margin:0;background:var(--paper);border:1px solid var(--line);padding:32px;display:flex;flex-direction:column;gap:18px;min-height:220px}
+.rv figcaption{margin-top:auto}
 .rv .stars{color:var(--walnut);letter-spacing:.3em;font-size:14px}
-.rv blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.5;color:var(--muted)}
+.rv blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.55;color:#3E3936}
 .rv figcaption{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 
 /* academy */
@@ -338,9 +339,10 @@ n.addEventListener('click',function(e){if(e.target.tagName==='A'){n.classList.re
     <div class="wrap">
       <div class="top"><div><div class="caps" style="color:var(--olive)">Kind words</div><h2 style="margin-top:16px">From our clients</h2></div><a class="tlink" href="https://www.google.com/maps/search/?api=1&amp;query=Morph+Beauty+Co.+7819+50+Ave+Unit+203+Red+Deer+AB" target="_blank" rel="noopener">Read all our reviews on Google</a></div>
       <div class="rv">
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A lash extensions review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Lash extensions</figcaption></figure>
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A facials review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Facials</figcaption></figure>
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A nails review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Nails</figcaption></figure>
+        <figure><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>Chelsea is truly amazing. She is the most knowledgeable lash tech I have ever had the pleasure of meeting. She knew exactly what I needed to get the lashes I want while prioritizing lash health. Seeing how she maps it all out is also super cool! &hellip; I cannot recommend Chelsea and Morph Beauty Co more.</blockquote><figcaption>Piper F. · Eyelash extensions · Google review</figcaption></figure>
+        <figure><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>Chelsea is truly amazing! I've been getting lash lifts for over 7 years and have tried many different places and she stands out as the best by far. Her attention to detail is unmatched and her skill really shows in the results!</blockquote><figcaption>Chrissy M. · Lash lift · Google review</figcaption></figure>
+        <figure><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>I recently had my teeth whitened by Chelsea, and the experience was truly outstanding. From start to finish, everything felt personalized and thoughtfully tailored to my needs. &hellip; My teeth have never looked better; they're the whitest they've ever been!</blockquote><figcaption>Alyse S. · Teeth whitening · Google review</figcaption></figure>
+        <figure><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>Chelsea is amazing! She makes the process so smooth and quick and helps you feel so confident! My spray tan set perfectly and it didn't get blotchy or dry. Highly recommend!</blockquote><figcaption>Realle R. · Spray tan · Google review</figcaption></figure>
       </div>
     </div>
   </section>
