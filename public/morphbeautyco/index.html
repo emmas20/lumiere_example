@@ -127,6 +127,25 @@ header.nav .btn{padding:11px 20px;font-size:11.5px}
 .artist .acts{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:10px}
 .pending{display:inline-block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--olive);border:1px solid var(--olive);padding:3px 9px;vertical-align:middle}
 
+/* menu */
+.menu{background:var(--paper);border-block:1px solid var(--line);padding-block:110px}
+.menu .top{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+@media (max-width:860px){.menu .top{grid-template-columns:1fr;gap:14px}}
+.menu h2{font-size:clamp(40px,6vw,76px);line-height:1}
+.menu .top p{color:var(--muted);max-width:46ch}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+@media (max-width:1000px){.mgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.mgrid{grid-template-columns:1fr}}
+.mcol{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--ink);padding-top:20px;min-width:0}
+.mcol .caps{color:var(--olive);font-size:11px}
+.mcol h3{font-size:26px;line-height:1.15}
+.mcol ul{list-style:none;margin:0;padding:0;flex:1}
+.mcol li{padding:10px 0;border-bottom:1px solid var(--line);font-size:15.5px;font-weight:400}
+.mcol .tlink{align-self:flex-start;margin-top:8px}
+.academy .quote{margin:34px 0 0;padding:26px 0 0;border-top:1px solid rgba(246,242,236,.2)}
+.academy .quote blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.5;color:var(--cream)}
+.academy .quote figcaption{margin-top:14px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--on-dark-muted)}
+.academy .quote .stars{color:#D9CBBE;letter-spacing:.3em;font-size:13px;margin-bottom:12px}
 /* reviews */
 .reviews{padding-block:60px 120px}
 .reviews .top{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
@@ -191,7 +210,7 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
 
 <header class="nav"><div class="wrap">
   <a href="#top" aria-label="Morph Beauty Co. home"><span class="logo" role="img" aria-label="Morph Beauty Company"></span></a>
-  <nav aria-label="Main" id="mainnav"><a href="#studio">The Studio</a><a href="#artists">Our Artists</a><a href="#academy">Academy</a><a href="#visit">Visit</a></nav>
+  <nav aria-label="Main" id="mainnav"><a href="#studio">The Studio</a><a href="#artists">Our Artists</a><a href="#menu">Menu</a><a href="#academy">Academy</a><a href="#visit">Visit</a></nav>
   <a class="btn" href="#artists">Book now</a>
   <button class="menu-btn" type="button" id="menubtn" aria-expanded="false" aria-controls="mainnav">Menu</button>
 </div></header>
@@ -294,13 +313,34 @@ n.addEventListener('click',function(e){if(e.target.tagName==='A'){n.classList.re
     </div>
   </section>
 
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="top"><div><div class="caps" style="color:var(--olive)">Services</div><h2 style="margin-top:20px">Menu</h2></div>
+        <p>Every service offered at Morph Beauty Co. Each artist sets their own prices and schedule, so tap through to see their current prices and open times.</p></div>
+      <div class="mgrid">
+        <div class="mcol"><div class="caps">Chelsea Rae Styles</div><h3>Lashes, skin and tanning</h3>
+          <ul><li>Lash extensions</li><li>Lash lifts and tints</li><li>Clinical facials</li><li>Dermaplaning</li><li>Spray tanning</li><li>Professional teeth whitening</li></ul>
+          <a class="tlink" href="https://www.vagaro.com/morphbeautyco" target="_blank" rel="noopener">See prices and book</a></div>
+        <div class="mcol"><div class="caps">Volume One Beauty · Paige</div><h3>Brows</h3>
+          <ul><li>Brow services</li></ul>
+          <a class="tlink" href="https://www.volumeonebeauty.com/" target="_blank" rel="noopener">See prices and book</a></div>
+        <div class="mcol"><div class="caps">Sage Beauty Bar · Karlee</div><h3>Nails and waxing</h3>
+          <ul><li>Nails</li><li>Waxing</li></ul>
+          <a class="tlink" href="https://app.zoroliq.com/book/ks-beauty-bar-71e2ab72d513" target="_blank" rel="noopener">See prices and book</a></div>
+        <div class="mcol"><div class="caps">Morph Beauty Academy</div><h3>Training</h3>
+          <ul><li>Certification courses</li><li>Hands-on training</li><li>Online courses (coming soon)</li></ul>
+          <a class="tlink" href="#academy">Learn about training</a></div>
+      </div>
+    </div>
+  </section>
+
   <section class="reviews">
     <div class="wrap">
-      <div class="top"><div><div class="caps" style="color:var(--olive)">Kind words</div><h2 style="margin-top:16px">From our clients</h2></div><span class="pending">Google reviews go here</span></div>
+      <div class="top"><div><div class="caps" style="color:var(--olive)">Kind words</div><h2 style="margin-top:16px">From our clients</h2></div><span class="pending">More Google reviews coming</span></div>
       <div class="rv">
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A client review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Google</figcaption></figure>
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A client review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Google</figcaption></figure>
-        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A client review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Google</figcaption></figure>
+        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A lash extensions review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Lash extensions</figcaption></figure>
+        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A facials review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Facials</figcaption></figure>
+        <figure><div class="stars" aria-hidden="true">★★★★★</div><blockquote>A nails review from the Morph Beauty Co. Google page will go here.</blockquote><figcaption>Client name · Nails</figcaption></figure>
       </div>
     </div>
   </section>
@@ -316,6 +356,7 @@ n.addEventListener('click',function(e){if(e.target.tagName==='A'){n.classList.re
             <p>Professional beauty training, taught by Chelsea Rae Styles.</p>
           </div>
           <div class="by"><div><b>Chelsea Rae</b><span>Founder and lead educator</span></div></div>
+          <figure class="quote"><div class="stars" aria-label="5 out of 5 stars">★★★★★</div><blockquote>I just completed my spray tan course with Chelsea and left feeling confident in my technique and understanding of the products. She made the whole experience comfortable and informative, and I left with everything I needed to start right away. I'm so grateful for the hands on training and I highly recommend her.</blockquote><figcaption>Shianne H. · Spray tan course · Google review</figcaption></figure>
           <a class="btn light" href="https://www.instagram.com/chelsearaestyles/" target="_blank" rel="noopener">Ask about upcoming training</a>
         </div>
         <div>
@@ -351,7 +392,7 @@ n.addEventListener('click',function(e){if(e.target.tagName==='A'){n.classList.re
 
 <footer><div class="wrap">
   <div class="row"><span class="logo" role="img" aria-label="Morph Beauty Company"></span><span class="tag">Transformation begins here.</span></div>
-  <div class="row"><nav aria-label="Footer"><a href="#studio">The Studio</a><a href="#artists">Our Artists</a><a href="#academy">Academy</a><a href="#visit">Visit</a><a href="https://www.instagram.com/chelsearaestyles/" target="_blank" rel="noopener">Instagram</a></nav></div>
+  <div class="row"><nav aria-label="Footer"><a href="#studio">The Studio</a><a href="#artists">Our Artists</a><a href="#menu">Menu</a><a href="#academy">Academy</a><a href="#visit">Visit</a><a href="https://www.instagram.com/chelsearaestyles/" target="_blank" rel="noopener">Instagram</a></nav></div>
   <div class="fine"><span>© 2026 Morph Beauty Co. · 7819 50 Ave, Unit 203, Red Deer, Alberta</span><span>Website by Zoroliq</span></div>
 </div></footer>
 
